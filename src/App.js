@@ -1,14 +1,15 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 
 function App() {
   const [tech, setTech] = useState([]);
 
   const [newTech, setNewTech] = useState('');
 
-  function handleAdd() {
+  // Used to avoid render function handleAdd everytime
+  const handleAdd = useCallback(() => {
     setTech([...tech, newTech]);
     setNewTech('');
-  }
+  }, [newTech, tech]);
 
   // Like componentDidMount
   useEffect(() => {
@@ -23,7 +24,7 @@ function App() {
     localStorage.setItem('tech', JSON.stringify(tech));
   }, [tech]);
 
-  // Used to avoid calling render
+  // Used to avoid call tech.length on render everytime
   const techSize = useMemo(() => tech.length, [tech]);
 
   return (
